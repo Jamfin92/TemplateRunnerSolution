@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,6 +11,7 @@ namespace TemplateRunner
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        public static Logger Logger = LogManager.GetCurrentClassLogger();
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -21,8 +23,9 @@ namespace TemplateRunner
         //log unhandled exceptions
         protected void Application_Error()
         {
+//using nlog, log the exception with the location of the error
             Exception ex = Server.GetLastError();
-            LogLib.Logger.LogException(ex);
+            Logger.Error(ex, "Unhandled exception");
             Response.Redirect("/Home/Error");
         }
     }
